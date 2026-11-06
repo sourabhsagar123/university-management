@@ -1,0 +1,186 @@
+// University Management System - Prisma Schema
+// Database: PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  FACULTY
+  STUDENT
+}
+
+enum AccountStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+model User {
+  id            String        @id @default(cuid())
+  email         String        @unique
+  passwordHash  String
+  role          UserRole
+  name          String
+  status        AccountStatus @default(ACTIVE)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  student       Student?
+  faculty       Faculty?
+
+  @@index([email])
+  @@index([role])
+  @@map("users")
+}
+
+model Department {
+  id          String        @id @default(cuid())
+  code        String        @unique
+  name        String
+  description String?
+  headId      String?
+  status      AccountStatus @default(ACTIVE)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  students    Student[]
+  faculty     Faculty[]
+  courses     Course[]
+
+  @@index([code])
+  @@map("departments")
+}
+
+model Student {
+  id               String        @id @default(cuid())
+  registrationNo   String        @unique
+  userId           String        @unique
+  departmentId     String
+  programme        String
+  currentSemester  Int           @default(1)
+  admissionYear    Int
+  phone            String?
+  status           AccountStatus @default(ACTIVE)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  department       Department    @relation(fields: [departmentId], references: [id])
+  enrollments      Enrollment[]
+
+  @@index([registrationNo])
+  @@index([departmentId])
+  @@index([currentSemester])
+  @@map("students")
+}
+
+model Faculty {
+  id              String        @id @default(cuid())
+  employeeId      String        @unique
+  userId          String        @unique
+  departmentId    String
+  designation     String
+  phone           String?
+  status          AccountStatus @default(ACTIVE)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  department      Department    @relation(fields: [departmentId], references: [id])
+  courseOfferings CourseOffering[]
+
+  @@index([employeeId])
+  @@index([departmentId])
+  @@map("faculty")
+}
+
+model Course {
+  id           String        @id @default(cuid())
+  code         String        @unique
+  title        String
+  credits      Int
+  departmentId String
+  semester     Int
+  description  String?
+  status       AccountStatus @default(ACTIVE)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  department   Department    @relation(fields: [departmentId], references: [id])
+  offerings    CourseOffering[]
+
+  @@index([code])
+  @@index([departmentId])
+  @@index([semester])
+  @@map("courses")
+}
+
+model CourseOffering {
+  id            String        @id @default(cuid())
+  courseId       String
+  facultyId     String
+  academicYear  Int
+  semester      Int
+  section       String        @default("A")
+  maxStudents   Int           @default(60)
+  status        AccountStatus @default(ACTIVE)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  course        Course        @relation(fields: [courseId], references: [id])
+  faculty       Faculty       @relation(fields: [facultyId], references: [id])
+  enrollments   Enrollment[]
+
+  @@unique([courseId, academicYear, semester, section])
+  @@index([courseId])
+  @@index([facultyId])
+  @@index([academicYear, semester])
+  @@map("course_offerings")
+}
+
+model Enrollment {
+  id               String        @id @default(cuid())
+  studentId        String
+  courseOfferingId  String
+  enrollmentDate   DateTime      @default(now())
+  status           AccountStatus @default(ACTIVE)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  student          Student       @relation(fields: [studentId], references: [id])
+  courseOffering   CourseOffering @relation(fields: [courseOfferingId], references: [id])
+  result           Result?
+
+  @@unique([studentId, courseOfferingId])
+  @@index([studentId])
+  @@index([courseOfferingId])
+  @@map("enrollments")
+}
+
+model Result {
+  id              String    @id @default(cuid())
+  enrollmentId    String    @unique
+  internalMarks   Float?
+  externalMarks   Float?
+  totalMarks      Float?
+  grade           String?
+  gradePoints     Float?
+  isPublished     Boolean   @default(false)
+  remarks         String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  enrollment      Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+
+  @@index([enrollmentId])
+  @@index([isPublished])
+  @@map("results")
+}
+
