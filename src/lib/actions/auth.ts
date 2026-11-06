@@ -49,12 +49,18 @@ export async function login(formData: FormData): Promise<{ error: string } | voi
     }
 
     redirect(redirectMap[user.role] || '/login')
-  } catch (error) {
+  } catch (error: any) {
     // Next.js redirect throws a special error, re-throw it
     if (error instanceof Error && error.message === 'NEXT_REDIRECT') {
       throw error
     }
-    return { error: 'An unexpected error occurred. Please try again.' }
+    console.error('Login action error:', error)
+    if (error?.code === 'P1001' || error?.message?.includes("Can't reach database server")) {
+      return {
+        error: 'Database connection failed: Cannot reach PostgreSQL on localhost:5432. Please make sure your database server is running.',
+      }
+    }
+    return { error: 'An unexpected error occurred. Please check your credentials or database status.' }
   }
 }
 

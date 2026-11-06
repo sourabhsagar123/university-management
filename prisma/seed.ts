@@ -43,7 +43,10 @@ async function main() {
   await prisma.user.create({
     data: { email: 'admin@cu.edu', passwordHash, name: 'System Administrator', role: 'ADMIN' },
   })
-  console.log('Created admin user')
+  await prisma.user.create({
+    data: { email: 'im.aditya@gmail.com', passwordHash, name: 'Aditya (Administrator)', role: 'ADMIN' },
+  })
+  console.log('Created admin users')
 
   // ── Faculty ──
   const facultyData = [

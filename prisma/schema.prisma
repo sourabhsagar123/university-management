@@ -1,6 +1,4 @@
-// University Management System - Prisma Schema
-// Database: PostgreSQL
-
+// University Management System - Prisma Schema (PostgreSQL)
 generator client {
   provider = "prisma-client-js"
 }
@@ -183,4 +181,3 @@ model Result {
   @@index([isPublished])
   @@map("results")
 }
-

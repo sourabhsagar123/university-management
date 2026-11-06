@@ -144,6 +144,45 @@ export default function LoginPage() {
               </button>
             </form>
 
+            {/* Quick Demo Fill Buttons */}
+            <div className="mt-6 pt-5 border-t border-gray-100">
+              <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
+                Demo Accounts (Click to Auto-fill):
+              </p>
+              <div className="grid grid-cols-3 gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail("admin@cu.edu")
+                    setPassword("password123")
+                  }}
+                  className="px-2 py-1.5 text-xs font-medium rounded-md bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors"
+                >
+                  Admin
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail("faculty@cu.edu")
+                    setPassword("password123")
+                  }}
+                  className="px-2 py-1.5 text-xs font-medium rounded-md bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors"
+                >
+                  Faculty
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail("student@cu.edu")
+                    setPassword("password123")
+                  }}
+                  className="px-2 py-1.5 text-xs font-medium rounded-md bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors"
+                >
+                  Student
+                </button>
+              </div>
+            </div>
+
             <p className="mt-6 text-center text-xs text-gray-400">
               © {new Date().getFullYear()} Chandigarh University. All rights reserved.
             </p>
