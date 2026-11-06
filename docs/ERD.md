@@ -194,3 +194,4 @@ erDiagram
 - Student department details (`Department`) are factored out of `Student` into `Department`.
 - Course details are factored out into `Course`, and academic sessions are factored out into `CourseOffering`.
 - User authentication details (`User`) are decoupled from domain entities (`Student`, `Faculty`), allowing single sign-on extensibility and zero redundancy.
+

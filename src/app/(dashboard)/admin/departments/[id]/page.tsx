@@ -176,3 +176,4 @@ export default async function DepartmentDetailPage({ params }: { params: { id: s
     </div>
   )
 }
+

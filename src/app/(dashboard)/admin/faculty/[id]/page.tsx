@@ -92,3 +92,4 @@ function InfoRow({ label, value, badge }: { label: string; value: string; badge?
     </div>
   )
 }
+

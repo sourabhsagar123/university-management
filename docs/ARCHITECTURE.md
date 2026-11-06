@@ -83,3 +83,4 @@ The calculation engine automatically determines grade and grade points based on 
 | **50 – 59** | **B** | **6.0** | Above Average |
 | **40 – 49** | **C** | **5.0** | Pass |
 | **0 – 39** | **F** | **0.0** | Fail |
+

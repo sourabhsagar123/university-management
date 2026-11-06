@@ -86,3 +86,4 @@ export default function EditDepartmentPage({ params }: { params: { id: string } 
     </div>
   )
 }
+

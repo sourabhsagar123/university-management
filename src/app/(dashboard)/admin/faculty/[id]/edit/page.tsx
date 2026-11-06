@@ -129,3 +129,4 @@ export default function EditFacultyPage({ params }: { params: { id: string } }) 
     </div>
   )
 }
+
